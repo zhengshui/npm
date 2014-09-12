@@ -6,6 +6,8 @@ var pidfile = path.resolve(__dirname, "..", "..", "child.pid")
 var rimraf = require("rimraf")
 
 if (process.argv[2]) {
+  console.error("bad-server.js child")
+  console.log("ok")
   createServer(function (req, res) {
     setTimeout(function () {
       res.writeHead(404)
@@ -15,15 +17,12 @@ if (process.argv[2]) {
   }).listen(8080)
 }
 else {
+  console.error("bad-server.js parent")
   var child = spawn(
     process.execPath,
     [__filename, "whatever"],
     {
-      stdio: [
-        "ignore",
-        process.stdout,
-        process.stderr
-      ],
+      stdio: [0, 1, 2],
       detached: true
     }
   )
@@ -35,6 +34,10 @@ else {
     process.kill(pid, "SIGKILL")
   } catch (er) {}
 
-  console.error(pidfile)
-  fs.writeFileSync(__dirname + '/child.pid', child.pid + '\n')
+  fs.writeFileSync(pidfile, child.pid + '\n')
+  // child.stdout.on("readable", function() {
+  //   process.exit()
+  // })
+  // Give it a sec for the child to do something
+  setTimeout(function() {}, 50)
 }

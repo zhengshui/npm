@@ -37,9 +37,12 @@ test("cleanup", function (t) {
 
 function cleanup () {
   try {
-    var pid = +fs.readfilesync(pidfile)
-    process.kill(pid, "sigkill")
-  } catch (er) {}
+    var pid = +fs.readFileSync(pidfile)
+    console.error("pid=%j", pid)
+    process.kill(pid, "SIGKILL")
+  } catch (er) {
+    console.error("error killing child", er)
+  }
 
   rimraf.sync(nm)
   rimraf.sync(pidfile)

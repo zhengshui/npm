@@ -12,9 +12,11 @@ var common = require("../common-tap.js")
 var pkg = resolve(__dirname, "ls-l-depth-0")
 var dep = resolve(pkg, "deps", "glock")
 var modules = resolve(pkg, "node_modules")
+var dir = resolve(__dirname, "ls-l-depth-0")
 
 var expected =
-  "\n│ /Users/ogd/Documents/projects/npm/npm/test/tap/ls-l-depth-0\n" +
+  "\n" +
+  "│ " + dir + "\n" +
   "│ \n" +
   "└── glock@1.8.7\n" +
   "    an inexplicably hostile sample package\n" +

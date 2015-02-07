@@ -18,7 +18,7 @@ test("npm version <semver> with working directory not clean", function (t) {
     which("git", function (err, git) {
       t.ifError(err, "git found")
 
-      function gitInit(_cb) {
+      function gitInit (_cb) {
         var child = spawn(git, ["init"])
         var out = ""
         child.stdout.on("data", function (d) {
@@ -29,7 +29,7 @@ test("npm version <semver> with working directory not clean", function (t) {
         })
       }
 
-      function addPackageJSON(_cb) {
+      function addPackageJSON (_cb) {
         var data = JSON.stringify({ name: "blah", version: "0.1.2" })
         fs.writeFile("package.json", data, function() {
           var child = spawn(git, ["add", "package.json"])
@@ -75,7 +75,7 @@ test("cleanup", function (t) {
   t.end()
 })
 
-function setup() {
+function setup () {
   mkdirp.sync(pkg)
   mkdirp.sync(cache)
   process.chdir(pkg)

@@ -17,8 +17,14 @@ them.  The name and version together form an identifier that is assumed
 to be completely unique.  Changes to the package should come along with
 changes to the version.
 
-The name is what your thing is called.  Some tips:
+The name is what your thing is called.  
 
+Some rules:
+* The name must be shorter than 214 characters. This includes the scope for scoped packages.
+* New packages must not have uppercase letters in the name.
+
+and some tips:
+* Don't use the same name as core Node modules.
 * Don't put "js" or "node" in the name.  It's assumed that it's js, since you're
   writing a package.json file, and you can specify the engine using the "engines"
   field.  (See below.)

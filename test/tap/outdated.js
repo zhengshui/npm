@@ -12,6 +12,7 @@ var common = require('../common-tap.js')
 // config
 var pkg = path.resolve(__dirname, 'outdated')
 var cache = path.resolve(pkg, 'cache')
+var originalLog
 
 var json = {
   name: 'outdated',
@@ -26,6 +27,7 @@ var json = {
 
 test('setup', function (t) {
   cleanup()
+  originalLog = console.log
   mkdirp.sync(cache)
   fs.writeFileSync(
     path.join(pkg, 'package.json'),
@@ -37,8 +39,6 @@ test('setup', function (t) {
 })
 
 test('it should not throw', function (t) {
-  var originalLog = console.log
-
   var output = []
   var expOut = [
     path.resolve(pkg, 'node_modules', 'async') +
@@ -118,6 +118,7 @@ test('it should not throw', function (t) {
 
 test('cleanup', function (t) {
   cleanup()
+  console.log = originalLog
   t.end()
 })
 

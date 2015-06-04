@@ -18,7 +18,9 @@ var json = {
   description: 'fixture',
   version: '0.0.1',
   dependencies: {
-    underscore: '1.3.1'
+    underscore: '1.3.1',
+    async: '0.2.9',
+    checker: '0.5.1'
   }
 }
 
@@ -39,7 +41,16 @@ test('it should not throw', function (t) {
 
   var output = []
   var expOut = [
-    path.resolve(pkg, 'node_modules', 'underscore'),
+    path.resolve(pkg, 'node_modules', 'async') +
+      ':async@0.2.9' +
+      ':async@0.2.9' +
+      ':async@0.2.10' +
+      '\n' +
+    path.resolve(pkg, 'node_modules', 'checker') +
+      ':checker@0.5.1' +
+      ':checker@0.5.1' +
+      ':checker@0.5.2' +
+      '\n' +
     path.resolve(pkg, 'node_modules', 'underscore') +
       ':underscore@1.3.1' +
       ':underscore@1.3.1' +
@@ -47,6 +58,22 @@ test('it should not throw', function (t) {
   ]
 
   var expData = [
+    [
+      pkg,
+      'async',
+      '0.2.9',
+      '0.2.9',
+      '0.2.10',
+      '0.2.9'
+    ],
+    [
+      pkg,
+      'checker',
+      '0.5.1',
+      '0.5.1',
+      '0.5.2',
+      '0.5.1'
+    ],
     [
       pkg,
       'underscore',
@@ -57,9 +84,7 @@ test('it should not throw', function (t) {
     ]
   ]
 
-  console.log = function () {
-    output.push.apply(output, arguments)
-  }
+  console.log = function () {}
   mr({ port: common.port }, function (er, s) {
     npm.load(
       {
@@ -71,6 +96,9 @@ test('it should not throw', function (t) {
       function () {
         npm.install('.', function (err) {
           t.ifError(err, 'install success')
+          console.log = function () {
+            output.push.apply(output, arguments)
+          }
           npm.outdated(function (er, d) {
             t.ifError(er, 'outdated success')
 

@@ -74,9 +74,16 @@ test('add-remote-git#get-resolved HTTPS', function (t) {
 test('add-remote-git#get-resolved edge cases', function (t) {
   var getResolved = require('../../lib/cache/add-remote-git.js').getResolved
 
-  t.notOk(
-    getResolved('git@bananaboat.com:galbi.git', 'decadacefadabade'),
-    'non-hosted Git SSH non-URI strings are invalid'
+  t.equal(
+    getResolved('user@bananaboat.com:galbi', 'decadacefadabade'),
+    'user@bananaboat.com:galbi#decadacefadabade',
+    'don\'t break unprefixed non-hosted scp-style locations'
+  )
+
+  t.equal(
+    getResolved('git+scp:user@bananaboat.com:galbi', 'decadacefadabade'),
+    'git+scp:user@bananaboat.com:galbi#decadacefadabade',
+    'don\'t break non-hosted scp-style locations'
   )
 
   t.equal(
@@ -91,11 +98,12 @@ test('add-remote-git#get-resolved edge cases', function (t) {
     'don\'t break non-hosted git: URLs'
   )
 
-  t.comment('test for https://github.com/npm/npm/issues/3224')
-  t.equal(
-    getResolved('git+ssh://git@git.example.com:my-repo.git#9abe82cb339a70065e75300f62b742622774693c', 'decadacefadabade'),
-    'git+ssh://git@git.example.com:my-repo.git#decadacefadabade',
-    'preserve weird colon in semi-standard ssh:// URLs'
+  // Note -- as much as I'd love to do this, it would break semver so we gotta
+  //         keep it *and* make it work well :(
+  t.notOk(
+    getResolved('git+ssh://user@bananaboat.com:galbi', 'decadacefadabade'),
+    'scp locations are not legal URIs -- don\'t accept that syntax'
   )
+
   t.end()
 })
